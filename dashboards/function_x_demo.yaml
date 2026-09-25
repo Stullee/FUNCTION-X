@@ -1,0 +1,74 @@
+# FUNCTION-X dashboard for the demo house.
+# Settings -> Dashboards -> Add dashboard -> New dashboard from scratch,
+# open it, pencil icon -> three dots -> Raw configuration editor, paste this.
+# For a real evcc setup replace "function_x_demo_" with "function_x_".
+title: FUNCTION-X
+views:
+  - title: Home
+    path: home
+    icon: mdi:home-lightning-bolt
+    cards:
+      - type: tile
+        entity: switch.function_x_demo_orchestration
+        name: Orchestration (off = only show decisions)
+        features:
+          - type: toggle
+      - type: markdown
+        title: What FUNCTION-X is doing
+        content: >
+          {% set d = states.sensor.function_x_demo_decision %}
+          {% if d %}
+          **{{ 'Acting' if d.attributes.orchestrating else 'Shadow mode: nothing is switched' }}**
+
+          {% for x in d.attributes.decisions %}
+          - **{{ x.device }}**: {{ x.action }} — {{ x.reason }}
+          {% endfor %}
+          {% for e in d.attributes.errors %}
+          - ⚠️ {{ e }}
+          {% endfor %}
+          {% endif %}
+      - type: grid
+        columns: 3
+        square: false
+        cards:
+          - type: tile
+            entity: sensor.function_x_demo_solar_power
+            icon: mdi:solar-power-variant
+          - type: tile
+            entity: sensor.function_x_demo_home_consumption
+            icon: mdi:home
+          - type: tile
+            entity: sensor.function_x_demo_grid_power
+            icon: mdi:transmission-tower
+          - type: tile
+            entity: sensor.function_x_demo_battery
+          - type: tile
+            entity: sensor.function_x_demo_solar_surplus
+            icon: mdi:weather-sunny-alert
+          - type: tile
+            entity: sensor.function_x_demo_demo_car_charging_power
+            icon: mdi:car-electric
+          - type: tile
+            entity: binary_sensor.function_x_demo_heat_pump_boost_recommended
+            icon: mdi:heat-pump
+          - type: tile
+            entity: sensor.function_x_demo_electricity_price
+            icon: mdi:currency-eur
+          - type: tile
+            entity: sensor.function_x_demo_price_level
+            icon: mdi:tag-arrow-down
+      - type: history-graph
+        title: Power flows
+        hours_to_show: 3
+        entities:
+          - entity: sensor.function_x_demo_solar_power
+          - entity: sensor.function_x_demo_home_consumption
+          - entity: sensor.function_x_demo_grid_power
+          - entity: sensor.function_x_demo_demo_car_charging_power
+      - type: history-graph
+        title: Decisions
+        hours_to_show: 3
+        entities:
+          - entity: binary_sensor.function_x_demo_heat_pump_boost_recommended
+          - entity: sensor.function_x_demo_price_level
+          - entity: sensor.function_x_demo_battery

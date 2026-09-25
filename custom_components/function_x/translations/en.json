@@ -1,0 +1,94 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "FUNCTION-X Energy Orchestrator",
+        "description": "Where should FUNCTION-X read your house from?",
+        "menu_options": {
+          "evcc": "evcc (solar, battery, wallbox, car)",
+          "demo": "Demo house (simulated, no hardware needed)"
+        }
+      },
+      "evcc": {
+        "title": "Connect to evcc",
+        "data": {
+          "evcc_url": "evcc URL",
+          "api_key": "API key"
+        },
+        "data_description": {
+          "evcc_url": "For the evcc Home Assistant add-on this is usually http://<your-ha-ip>:7070",
+          "api_key": "Only needed if evcc has authentication enabled for its API"
+        }
+      },
+      "roles": {
+        "title": "Your devices",
+        "description": "Tell FUNCTION-X which devices it may coordinate. Everything is optional.",
+        "data": {
+          "heat_pump_switch": "Heat pump boost switch (SG Ready)",
+          "price_sensor": "Electricity price sensor",
+          "ev_control": "Let FUNCTION-X choose the car charging mode"
+        },
+        "data_description": {
+          "heat_pump_switch": "A switch that puts the heat pump into boost mode, e.g. the relay on its SG Ready input. In the demo, leave empty to use a simulated heat pump, or pick an input_boolean helper to watch it switch.",
+          "price_sensor": "Overrides the price from evcc, e.g. a Tibber or Nord Pool sensor in €/kWh"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Could not reach evcc at this URL",
+      "invalid_auth": "evcc rejected the API key"
+    },
+    "abort": {
+      "already_configured": "This source is already set up"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Your devices",
+        "data": {
+          "heat_pump_switch": "Heat pump boost switch (SG Ready)",
+          "price_sensor": "Electricity price sensor",
+          "ev_control": "Let FUNCTION-X choose the car charging mode"
+        }
+      },
+      "tuning": {
+        "title": "Fine tuning",
+        "data": {
+          "hp_boost_export_w": "Boost heat pump above this solar surplus",
+          "hp_stop_import_w": "Stop boost above this grid import",
+          "hp_min_on_minutes": "Minimum boost duration",
+          "hp_min_off_minutes": "Minimum pause between boosts",
+          "cheap_price_quantile": "Cheap price = cheapest share of the next 24 h"
+        },
+        "data_description": {
+          "hp_min_on_minutes": "Protects the compressor from switching too often",
+          "cheap_price_quantile": "25 % means: the cheapest quarter of upcoming price slots counts as cheap"
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "heat_pump_boost": { "name": "Heat pump boost recommended" }
+    },
+    "sensor": {
+      "pv_power": { "name": "Solar power" },
+      "grid_power": { "name": "Grid power" },
+      "home_power": { "name": "Home consumption" },
+      "surplus_power": { "name": "Solar surplus" },
+      "battery_soc": { "name": "Battery" },
+      "battery_power": { "name": "Battery power" },
+      "grid_price": { "name": "Electricity price" },
+      "price_level": {
+        "name": "Price level",
+        "state": { "cheap": "Cheap", "normal": "Normal", "unknown": "Unknown" }
+      },
+      "decision": { "name": "Decision" },
+      "loadpoint_power": { "name": "{name} charging power" }
+    },
+    "switch": {
+      "orchestration": { "name": "Orchestration" }
+    }
+  }
+}
