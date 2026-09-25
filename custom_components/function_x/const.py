@@ -23,6 +23,9 @@ CONF_HEAT_PUMP_SWITCH: Final = "heat_pump_switch"
 CONF_PRICE_SENSOR: Final = "price_sensor"
 CONF_EV_CONTROL: Final = "ev_control"
 
+# Set by the house setup guide in the panel (config entry options)
+CONF_HOUSE: Final = "house"
+
 # Tuning (config entry options)
 CONF_HP_BOOST_EXPORT_W: Final = "hp_boost_export_w"
 CONF_HP_STOP_IMPORT_W: Final = "hp_stop_import_w"

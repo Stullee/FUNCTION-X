@@ -44,6 +44,7 @@ class SiteState:
     battery_power: float | None
     grid_price: float | None
     feed_in_price: float | None
+    has_pv: bool = False
     price_forecast: list[PriceSlot] = field(default_factory=list)
     loadpoints: list[LoadpointSnapshot] = field(default_factory=list)
 
@@ -122,6 +123,7 @@ def parse_state(raw: dict[str, Any]) -> SiteState:
         battery_power=battery_power,
         grid_price=_num(state.get("tariffGrid")),
         feed_in_price=_num(state.get("tariffFeedIn")),
+        has_pv=bool(state.get("pv")) or (_num(state.get("pvPower")) or 0) > 0,
         price_forecast=[s for s in slots if s is not None],
         loadpoints=loadpoints,
     )

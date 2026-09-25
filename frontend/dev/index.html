@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FUNCTION-X panel preview</title>
+    <style>
+      html, body { margin: 0; height: 100%; }
+      body { --primary-background-color: #fafafa; --card-background-color: #fff; --primary-text-color: #212121;
+        --secondary-text-color: #727272; --divider-color: rgba(0,0,0,.12); --primary-color: #03a9f4; }
+      body.dark { --primary-background-color: #111111; --card-background-color: #1c1c1c; --primary-text-color: #e1e1e1;
+        --secondary-text-color: #9b9b9b; --divider-color: rgba(225,225,225,.12); }
+    </style>
+  </head>
+  <body>
+    <script type="module">
+      // Stand-in for Home Assistant's icon element: a small rounded glyph.
+      customElements.define("ha-icon", class extends HTMLElement {
+        connectedCallback() {
+          const name = (this.getAttribute("icon") || "").replace("mdi:", "");
+          this.style.cssText = "display:inline-grid;place-items:center;width:var(--mdc-icon-size,24px);height:var(--mdc-icon-size,24px);border-radius:30%;background:currentColor;opacity:.85";
+          this.title = name;
+        }
+      });
+
+      import { createMockHass } from "./mock-hass.js";
+      const params = new URLSearchParams(location.search);
+      const dark = params.has("dark");
+      if (dark) document.body.classList.add("dark");
+      await import("../../custom_components/function_x/frontend/function-x-panel.js");
+      const panel = document.createElement("function-x-panel");
+      const mock = createMockHass({ dark, configured: params.get("configured") !== "0", floors: params.get("floors") !== "0" });
+      panel.narrow = params.has("narrow");
+      panel.hass = mock.hass;
+      mock.onChange = (hass) => (panel.hass = hass);
+      document.body.appendChild(panel);
+      window.__panel = panel;
+      window.__mock = mock;
+    </script>
+  </body>
+</html>

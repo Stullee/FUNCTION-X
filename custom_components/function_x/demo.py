@@ -139,6 +139,7 @@ class DemoSite:
             battery_power=round(battery),
             grid_price=_price(hour),
             feed_in_price=0.08,
+            has_pv=True,
             price_forecast=forecast,
             loadpoints=[
                 LoadpointSnapshot(

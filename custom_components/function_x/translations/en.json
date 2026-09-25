@@ -22,7 +22,7 @@
       },
       "roles": {
         "title": "Your devices",
-        "description": "Tell FUNCTION-X which devices it may coordinate. Everything is optional.",
+        "description": "Tell FUNCTION-X which devices it may coordinate. Everything is optional. Afterwards, open FUNCTION-X in the sidebar to set up your levels and rooms.",
         "data": {
           "heat_pump_switch": "Heat pump boost switch (SG Ready)",
           "price_sensor": "Electricity price sensor",
@@ -70,25 +70,51 @@
   },
   "entity": {
     "binary_sensor": {
-      "heat_pump_boost": { "name": "Heat pump boost recommended" }
+      "heat_pump_boost": {
+        "name": "Heat pump boost recommended"
+      }
     },
     "sensor": {
-      "pv_power": { "name": "Solar power" },
-      "grid_power": { "name": "Grid power" },
-      "home_power": { "name": "Home consumption" },
-      "surplus_power": { "name": "Solar surplus" },
-      "battery_soc": { "name": "Battery" },
-      "battery_power": { "name": "Battery power" },
-      "grid_price": { "name": "Electricity price" },
+      "pv_power": {
+        "name": "Solar power"
+      },
+      "grid_power": {
+        "name": "Grid power"
+      },
+      "home_power": {
+        "name": "Home consumption"
+      },
+      "surplus_power": {
+        "name": "Solar surplus"
+      },
+      "battery_soc": {
+        "name": "Battery"
+      },
+      "battery_power": {
+        "name": "Battery power"
+      },
+      "grid_price": {
+        "name": "Electricity price"
+      },
       "price_level": {
         "name": "Price level",
-        "state": { "cheap": "Cheap", "normal": "Normal", "unknown": "Unknown" }
+        "state": {
+          "cheap": "Cheap",
+          "normal": "Normal",
+          "unknown": "Unknown"
+        }
       },
-      "decision": { "name": "Decision" },
-      "loadpoint_power": { "name": "{name} charging power" }
+      "decision": {
+        "name": "Decision"
+      },
+      "loadpoint_power": {
+        "name": "{name} charging power"
+      }
     },
     "switch": {
-      "orchestration": { "name": "Orchestration" }
+      "orchestration": {
+        "name": "Orchestration"
+      }
     }
   }
 }

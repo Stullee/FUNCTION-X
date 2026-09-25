@@ -22,7 +22,7 @@
       },
       "roles": {
         "title": "Deine Geräte",
-        "description": "Welche Geräte darf FUNCTION-X koordinieren? Alles ist optional.",
+        "description": "Welche Geräte darf FUNCTION-X koordinieren? Alles ist optional. Öffne danach FUNCTION-X in der Seitenleiste, um Etagen und Räume einzurichten.",
         "data": {
           "heat_pump_switch": "Schalter für Wärmepumpen-Boost (SG Ready)",
           "price_sensor": "Strompreis-Sensor",
@@ -70,25 +70,51 @@
   },
   "entity": {
     "binary_sensor": {
-      "heat_pump_boost": { "name": "Wärmepumpen-Boost empfohlen" }
+      "heat_pump_boost": {
+        "name": "Wärmepumpen-Boost empfohlen"
+      }
     },
     "sensor": {
-      "pv_power": { "name": "PV-Leistung" },
-      "grid_power": { "name": "Netzleistung" },
-      "home_power": { "name": "Hausverbrauch" },
-      "surplus_power": { "name": "PV-Überschuss" },
-      "battery_soc": { "name": "Speicher" },
-      "battery_power": { "name": "Speicherleistung" },
-      "grid_price": { "name": "Strompreis" },
+      "pv_power": {
+        "name": "PV-Leistung"
+      },
+      "grid_power": {
+        "name": "Netzleistung"
+      },
+      "home_power": {
+        "name": "Hausverbrauch"
+      },
+      "surplus_power": {
+        "name": "PV-Überschuss"
+      },
+      "battery_soc": {
+        "name": "Speicher"
+      },
+      "battery_power": {
+        "name": "Speicherleistung"
+      },
+      "grid_price": {
+        "name": "Strompreis"
+      },
       "price_level": {
         "name": "Preisniveau",
-        "state": { "cheap": "Günstig", "normal": "Normal", "unknown": "Unbekannt" }
+        "state": {
+          "cheap": "Günstig",
+          "normal": "Normal",
+          "unknown": "Unbekannt"
+        }
       },
-      "decision": { "name": "Entscheidung" },
-      "loadpoint_power": { "name": "{name} Ladeleistung" }
+      "decision": {
+        "name": "Entscheidung"
+      },
+      "loadpoint_power": {
+        "name": "{name} Ladeleistung"
+      }
     },
     "switch": {
-      "orchestration": { "name": "Orchestrierung" }
+      "orchestration": {
+        "name": "Orchestrierung"
+      }
     }
   }
 }

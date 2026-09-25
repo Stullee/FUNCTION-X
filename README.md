@@ -5,8 +5,47 @@ battery, wallbox, car, heat pump) work together. It reads the house through
 [evcc](https://github.com/evcc-io/evcc), decides what each device should do, and
 explains every decision in plain language.
 
-**Status: early draft (v0.1).** Rule-based decisions, one heat pump boost switch,
-car charging through evcc, and a built-in demo house.
+**Status: early draft (v0.2).** Rule-based decisions, one heat pump boost switch,
+car charging through evcc, a built-in demo house, and a 3D house dashboard in the
+Home Assistant sidebar.
+
+![FUNCTION-X dashboard](docs/screenshots/overview.png)
+
+## The 3D house dashboard
+
+After installing, **FUNCTION-X** appears in the Home Assistant sidebar.
+
+- **The whole house:** solar on the roof, battery, heat pump, car(s) with
+  wallbox, and the grid connection. Moving dots show where power flows right now
+  (solar → house, house → car, export to the grid …). Windows light up in rooms
+  where a light is on.
+- **Click a level** (in 3D or on the chips at the top): the levels above lift
+  away and you look into the rooms, with temperature and lights per room.
+- **Click a room:** its lights, thermostats, covers and sensors, with controls.
+- **Sidebar:** the Orchestration switch, live energy values, and what
+  FUNCTION-X is doing and why.
+- Works in light and dark mode, on desktop and phone, in English and German.
+
+### Setting up your house
+
+The first time you open the panel, a short guide asks:
+
+1. **Levels & rooms:** add each floor (lowest first) and its rooms. The 3D house
+   rebuilds as you type.
+2. **Energy:** solar on the roof, home battery, heat pump, how many cars.
+   Anything FUNCTION-X detected is already ticked.
+3. **Devices:** lights, thermostats and sensors that aren't in a room yet each
+   get a room dropdown.
+
+The guide saves into Home Assistant's own **floors and areas**, so it stays in
+sync with **Settings → Areas, labels & zones** and every device you add later.
+Typing the name of a room that already exists links that room instead of making
+a duplicate. Open the guide again at any time with **Edit house**; changing
+floors and rooms needs an administrator account.
+
+| Setup guide | Room view | Phone |
+|---|---|---|
+| ![Setup guide](docs/screenshots/setup-guide.png) | ![Room](docs/screenshots/room.png) | ![Phone](docs/screenshots/mobile.png) |
 
 ## What it does today
 
@@ -46,8 +85,10 @@ Choose **Demo house** in the setup dialog. No hardware or evcc is needed.
 - Leave "Heat pump boost switch" empty to use a simulated heat pump. Or create
   a toggle helper (**Settings → Devices & services → Helpers → Toggle**), select
   it, and watch FUNCTION-X switch it once Orchestration is on.
-- Dashboard: create a new dashboard, open the **Raw configuration editor** and
-  paste [`dashboards/function_x_demo.yaml`](dashboards/function_x_demo.yaml).
+- Open **FUNCTION-X** in the sidebar. Without floors in Home Assistant it
+  shows a sample two-storey house until you run the setup guide.
+- Prefer standard cards? [`dashboards/function_x_demo.yaml`](dashboards/function_x_demo.yaml)
+  is a classic Lovelace dashboard you can paste into the **Raw configuration editor**.
 
 ## Connecting a real house (evcc)
 
@@ -73,8 +114,23 @@ Choose **Demo house** in the setup dialog. No hardware or evcc is needed.
 
 ```bash
 uv venv -p 3.13 .venv && uv pip install -p .venv/bin/python pytest-homeassistant-custom-component ruff
+# The panel depends on HA's frontend package; install the version HA pins:
+uv pip install -p .venv/bin/python "$(.venv/bin/python -c "import json,homeassistant.components.frontend as f,os;print(json.load(open(os.path.join(os.path.dirname(f.__file__),'manifest.json')))['requirements'][0])")"
 .venv/bin/python -m pytest
 .venv/bin/ruff check custom_components tests
+```
+
+Panel (source in `frontend/src`, built into
+`custom_components/function_x/frontend/function-x-panel.js`, which is committed
+so HACS installs need no build step):
+
+```bash
+cd frontend && npm install && npm run build   # or: npm run watch
+# Preview with a fake Home Assistant (no HA needed):
+cd .. && python3 -m http.server 8765
+#   http://localhost:8765/frontend/dev/index.html   (?dark, ?narrow, ?configured=0&floors=0)
+cd frontend && node dev/smoke.mjs            # clicks through the panel, checks actions
+node dev/screenshots.mjs ../docs/screenshots # needs Playwright
 ```
 
 Layout:
@@ -84,6 +140,11 @@ Layout:
 - `evcc.py`: evcc REST client. It accepts both old and new `/api/state` shapes.
 - `demo.py`: the simulated house.
 - `coordinator.py`: poll every 30 s → decide → apply (only when Orchestration is on).
+- `panel.py` / `house.py`: registers the sidebar panel and its websocket API
+  (`function_x/house`, `function_x/house/save`, `function_x/assign`), built on
+  Home Assistant's floor, area, device and entity registries.
+- `frontend/src/scene.js`: the three.js house; `panel.js`: sidebar, level/room
+  views and the setup guide.
 
 ## Licensing note
 

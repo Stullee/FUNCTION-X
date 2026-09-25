@@ -1,0 +1,14 @@
+{
+  "name": "function-x-panel",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "scripts": {
+    "build": "esbuild src/panel.js --bundle --format=esm --minify --target=es2021 --legal-comments=eof --outfile=../custom_components/function_x/frontend/function-x-panel.js",
+    "watch": "npm run build -- --watch"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "three": "^0.186.1"
+  }
+}

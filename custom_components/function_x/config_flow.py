@@ -21,6 +21,7 @@ from .const import (
     CONF_EV_CONTROL,
     CONF_EVCC_URL,
     CONF_HEAT_PUMP_SWITCH,
+    CONF_HOUSE,
     CONF_HP_BOOST_EXPORT_W,
     CONF_HP_MIN_OFF_MIN,
     CONF_HP_MIN_ON_MIN,
@@ -182,7 +183,9 @@ class FunctionXOptionsFlow(OptionsFlowWithReload):
 
     async def async_step_tuning(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         if user_input is not None:
-            return self.async_create_entry(data={**self._roles, **user_input})
+            # Keep what the panel's house setup guide stored.
+            kept = {k: v for k, v in self.config_entry.options.items() if k == CONF_HOUSE}
+            return self.async_create_entry(data={**kept, **self._roles, **user_input})
         return self.async_show_form(
             step_id="tuning", data_schema=_tuning_schema(dict(self.config_entry.options))
         )

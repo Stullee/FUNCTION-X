@@ -1,12 +1,20 @@
 {
   "domain": "function_x",
   "name": "FUNCTION-X Energy Orchestrator",
-  "codeowners": ["@Stullee"],
+  "codeowners": [
+    "@Stullee"
+  ],
   "config_flow": true,
+  "dependencies": [
+    "frontend",
+    "http",
+    "panel_custom",
+    "websocket_api"
+  ],
   "documentation": "https://github.com/Stullee/FUNCTION-X",
   "integration_type": "hub",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/Stullee/FUNCTION-X/issues",
   "requirements": [],
-  "version": "0.1.0"
+  "version": "0.2.0"
 }
